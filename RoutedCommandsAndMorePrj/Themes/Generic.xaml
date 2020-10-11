@@ -11,7 +11,9 @@
                     <Border
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}" />
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Ellipse x:Name="PART_Ellipse" Fill="{TemplateBinding Foreground}" />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

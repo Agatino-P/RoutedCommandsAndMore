@@ -13,6 +13,14 @@
         <local:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <Button Command="{Binding MyDialogCmd}" Content="ShowDialog" />
+        <local:MyCC
+            Grid.Row="1"
+            Background="Pink"
+            Foreground="Blue" />
     </Grid>
 </Window>
