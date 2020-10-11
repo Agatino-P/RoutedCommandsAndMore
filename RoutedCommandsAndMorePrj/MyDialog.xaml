@@ -1,0 +1,18 @@
+﻿<Window
+    x:Class="RoutedCommandsAndMorePrj.MyDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RoutedCommandsAndMorePrj"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MyDialog"
+    Width="800"
+    Height="450"
+    ButtonBase.Click="MyCC_Click"
+    mc:Ignorable="d">
+    <StackPanel>
+        <local:MyUC local:MyDialog.MyAPint="1" />
+        <local:MyUC local:MyDialog.MyAPint="2" />
+        <Button Content="Not MyCC" />    
+    </StackPanel>
+</Window>
