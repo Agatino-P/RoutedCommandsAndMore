@@ -47,7 +47,7 @@ namespace RoutedCommandsAndMorePrj
             unhookupCommand(oldCommand);
             hookupCommand(newCommand);
 
-            onCanExecuteChanged(null, null);
+            canExecuteChanged(null, null);
         }
 
         private void unhookupCommand(ICommand oldCommand)
@@ -56,7 +56,6 @@ namespace RoutedCommandsAndMorePrj
             {
                 return;
             }
-
             oldCommand.CanExecuteChanged -= _canExecuteChangedHandler;
         }
 
@@ -66,12 +65,11 @@ namespace RoutedCommandsAndMorePrj
             {
                 return;
             }
-
-            _canExecuteChangedHandler = new EventHandler(onCanExecuteChanged);
+            _canExecuteChangedHandler = new EventHandler(canExecuteChanged);
             newCommand.CanExecuteChanged += _canExecuteChangedHandler;
         }
 
-        private void onCanExecuteChanged(object sender, EventArgs e)
+        private void canExecuteChanged(object sender, EventArgs e)
         {
             if (Command != null)
             {
