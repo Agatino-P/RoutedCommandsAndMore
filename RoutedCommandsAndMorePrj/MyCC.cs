@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace RoutedCommandsAndMorePrj
@@ -24,19 +17,78 @@ namespace RoutedCommandsAndMorePrj
 
         private EventHandler _canExecuteChangedHandler;
 
+        [TypeConverter(typeof(CommandConverter))]
         public ICommand Command
         {
             get { return (ICommand)GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
         }
         public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.Register("Command", typeof(ICommand), typeof(MyCC), new PropertyMetadata(null));
+            DependencyProperty.Register("Command",
+                typeof(ICommand),
+                typeof(MyCC),
+                new PropertyMetadata(null, new PropertyChangedCallback(onCommandChangedCallback))
+                );
 
+        private static void onCommandChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is MyCC myCC))
+            {
+                return;
+            }
+            ICommand oldCommand = e.OldValue as ICommand;
+            ICommand newCommand = e.NewValue as ICommand;
 
+            myCC.commandChangedCallback(oldCommand, newCommand);
+        }
+
+        private void commandChangedCallback(ICommand oldCommand, ICommand newCommand)
+        {
+            unhookupCommand(oldCommand);
+            hookupCommand(newCommand);
+
+            onCanExecuteChanged(null, null);
+        }
+
+        private void unhookupCommand(ICommand oldCommand)
+        {
+            if (oldCommand == null)
+            {
+                return;
+            }
+
+            oldCommand.CanExecuteChanged -= _canExecuteChangedHandler;
+        }
+
+        private void hookupCommand(ICommand newCommand)
+        {
+            if (newCommand == null)
+            {
+                return;
+            }
+
+            _canExecuteChangedHandler = new EventHandler(onCanExecuteChanged);
+            newCommand.CanExecuteChanged += _canExecuteChangedHandler;
+        }
+
+        private void onCanExecuteChanged(object sender, EventArgs e)
+        {
+            if (Command != null)
+            {
+                if (Command is RoutedCommand routedCommand)
+                {
+                    IsEnabled = routedCommand.CanExecute(CommandParameter, CommandTarget);
+                }
+                else
+                {
+                    IsEnabled = Command.CanExecute(CommandParameter);
+                }
+            }
+        }
 
         public Object CommandParameter
         {
-            get { return (Object)GetValue(CommandParameterProperty); }
+            get { return GetValue(CommandParameterProperty); }
             set { SetValue(CommandParameterProperty, value); }
         }
         public static readonly DependencyProperty CommandParameterProperty =
@@ -68,10 +120,8 @@ namespace RoutedCommandsAndMorePrj
 
         private void Ellipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            
-        }
 
-        public class 
+        }
 
     }
 }
